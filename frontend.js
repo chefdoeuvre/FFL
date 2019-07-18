@@ -16,6 +16,10 @@ $(function () {
     
     elem.click(function() {
       addMessage( "START THE BATTLE BUTTON WAS PRESSED." );
+      var command = new Object();
+      command.type = 'request'
+      command.value = 'startbattle'
+      connection.send(JSON.stringify(command));
     });
 
     if (!window.WebSocket) {
@@ -57,8 +61,9 @@ $(function () {
       // first response from the server with user's color
       if (json.type === 'msg') { 
          addMessage(json.message)
-       
-      } else if (json.type === 'history') { // entire message history
+      } 
+      /*
+      else if (json.type === 'history') { // entire message history
         // insert every single message to the chat window
         for (var i=0; i < json.data.length; i++) {
         addMessage(json.data[i].author, json.data[i].text,
@@ -69,31 +74,12 @@ $(function () {
         input.removeAttr('disabled'); 
         addMessage(json.data.author, json.data.text,
                    json.data.color, new Date(json.data.time));
-      } else {
+      } 
+      */
+      else {
         console.log('Hmm..., I\'ve never seen JSON like this:', json);
       }
     };
-    /**
-     * Send message when user presses Enter key
-     */
-    input.keydown(function(e) {
-      if (e.keyCode === 13) {
-        var msg = $(this).val();
-        if (!msg) {
-          return;
-        }
-        // send the message as an ordinary text
-        connection.send(msg);
-        $(this).val('');
-        // disable the input field to make the user wait until server
-        // sends back response
-        input.attr('disabled', 'disabled');
-        // we know that the first message sent from a user their name
-        if (myName === false) {
-          myName = msg;
-        }
-      }
-    });
     /**
      * This method is optional. If the server wasn't able to
      * respond to the in 3 seconds then show some error message 
