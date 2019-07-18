@@ -3,8 +3,8 @@ $(function () {
     // for better performance - to avoid searching in DOM
     var content = $('#content');
     var input = $('#input');
-    var status = $('#status');
-    var elem = $('#elem');
+    var status = $('#ip');
+    //var elem = $('#elem');
     // my color assigned by the server
     var myColor = false;
     // my name sent to the server
@@ -14,12 +14,15 @@ $(function () {
     // if browser doesn't support WebSocket, just show
     // some notification and exit
     
-    elem.click(function() {
-      addMessage( "START THE BATTLE BUTTON WAS PRESSED." );
-      var command = new Object();
+    elem.onclick = function {
+      /*var command = new Object();
       command.type = 'request'
       command.value = 'startbattle'
-      connection.send(JSON.stringify(command));
+      var json = JSON.stringify(command)
+      connection.send(json);
+      addMessage( "-- THE BUTTON WAS PRESSED. I sent JSON: "+json);
+      */
+     alert( 'Клик!' );
     });
 
     if (!window.WebSocket) {
@@ -31,7 +34,7 @@ $(function () {
       return;
     }
     // open connection
-    var connection = new WebSocket('ws://127.0.0.1:1337');
+    var connection = new WebSocket('ws://127.0.0.1:5000');
     connection.onopen = function () {
       // first we want users to enter their names
       // тут выполняем при открытии коннекта 
