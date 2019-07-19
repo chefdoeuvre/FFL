@@ -4,14 +4,18 @@ import * as param from './params.js'
 /* 
 BUTTONS HANDLERS
 */
+function sendjson(json){
+    json = JSON.stringify(json);
+    connection.send(json);
+    addMessage('Send json: '+json)
+}
+
 function startbattle_handler() {
     var json = { 
       type: "request",
       value: "startbattle"
     };
-    json = JSON.stringify(json);
-    connection.send(json);
-    addMessage('Send json: '+json)
+    sendjson(json);
   }
 
 function getrandomship_handler() {
@@ -19,9 +23,7 @@ function getrandomship_handler() {
       type: "request",
       value: "getrandomship"
     };
-    json = JSON.stringify(json);
-    connection.send(json);
-    addMessage('Send json: '+json)
+    sendjson(json);
   }
   
 btn_startbattle.addEventListener("click", startbattle_handler);
