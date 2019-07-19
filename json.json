@@ -1,0 +1,87 @@
+
+/*
+Заметки:
+Клиент получает от сервера информацию о корабле, местоположении, УЗ (потом), событиях
+Клиент отправляет на сервер нажатия на кнопки микроменеджмента, управление движением, реакция на события
+*/
+/*
+текст, который клиент должен вывести в основное окно логов построчно 
+*/
+{
+    type: "msg"
+    message[0..N]: "text"
+ }
+
+ /*
+запуск боя
+*/
+ { 
+    type: "request"
+    value: "startbattle"
+ }
+ /*
+запрос на получение json с рандомно сгенерирированным кораблем
+*/
+ { 
+    type: "request"
+    value: "getrandomship"
+ }
+ 
+/*
+Информация о любом количестве кораблей, которая была запрошена клиентом
+*/
+{ 
+   type: "shipinfo"
+   ship[0..N]: {
+       name: "shipname"
+       body: {
+           name: "bodyname"
+           OM: "value"
+           capacity: "value"
+           size: "value"
+           hp: "value"
+       }
+       weapons[0..N] {
+           name: "value"
+           type: "value"
+           isActive: "value"
+           OM: "value"
+           size: "value"
+           hp: "value"
+           energyneed: "value"
+           damage: "value"
+           accuracy: "value"
+           maxdistance: "value"
+           efcdistance: "value"
+           reload: "value"
+       }
+       generators[0..N]{
+           name: "value"
+           isActive: "value"
+           OM: "value"
+           size: "value"
+           hp: "value"
+           energy: "value"
+       }
+       engines[0..N]{
+           name: "value"
+           isActive: "value"
+           OM: "value"
+           size: "value"
+           hp: "value"
+           energyneed: "value"
+           maxspeed: "value"
+           mobilityspeed: "value"
+       }
+       modules[0..N]{
+           name: "value"
+           isActive: "value"
+           OM: "value"
+           size: "value"
+           hp: "value"
+           energyneed: "value"
+           type: "value"
+           Description: "value"
+       }
+   }
+}
