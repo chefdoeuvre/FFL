@@ -6,10 +6,10 @@
     <style>
     * { font-family:tahoma; font-size:12px; padding:0px;margin:0px;}
     p { line-height:18px; }
-    div { width:1000px; margin-left:auto; margin-right:auto;}
+    div { width:700px; margin-left:auto; margin-right:auto;}
     #content { padding:5px; background:#ddd; border-radius:5px;
         overflow-y: scroll; border:1px solid #CCC;
-        margin-top:10px; height: 800px; }
+        margin-top:10px; height: 500px; }
     #status { width:88px;display:block;float:left;margin-top:15px; }
     #elem { width:150px;display:block;float:left;margin-top:15px;}
   </style>
@@ -18,9 +18,13 @@
   <body>
     <div id="content"></div>
     <div>
-      <span id="status">Connecting...</span>
-      <input id="btn_startbattle" type="button" value="Start battle" />
-      <input id="btn_randomship" type="button" value="Randomize ships" />
+      <fieldset>
+          <legend>Controls</legend>
+          <span id="status">Connecting...</span>
+          <button id="find">find opponent</button>
+          <button id="accept">accept / start battle</button>
+          <input id="btn_randomship" type="button" value="Randomize ships" />
+    </fieldset>
     </div>
   </body>
 </html>

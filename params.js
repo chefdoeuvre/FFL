@@ -2,4 +2,4 @@
 параметры
 */
 
-export var srvipaddr = 'ws://127.0.0.1:5000'
+export var srvipaddr = 'ws://localhost:1337/battle'

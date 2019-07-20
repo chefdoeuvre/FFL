@@ -1,5 +1,6 @@
 //const param =  import ('./params.js');
 import * as param from './params.js'
+//import * as utils from './utils.js'
 
 /* 
 BUTTONS HANDLERS
@@ -8,14 +9,16 @@ function sendjson(json){
     json = JSON.stringify(json);
     connection.send(json);
     addMessage('Send json: '+json)
+    //document.body.appendChild(buildHtmlTable(json));
 }
 
 function startbattle_handler() {
-    var json = { 
+    var json = [{ 
       type: "request",
       value: "startbattle"
-    };
-    sendjson(json);
+    }];
+    //sendjson(json);
+    connection.send("accept")
   }
 
 function getrandomship_handler() {
@@ -46,12 +49,13 @@ connection.onerror = function (error) {
     // most important part - incoming messages
 connection.onmessage = function (message) {
     try {
-      var json = JSON.parse(message.data);
+      var response = JSON.parse(message.data);
     } catch (e) {
       console.log('Invalid JSON: ', message.data);
       return;
       }
     // разбираем json.type, вызываем ф-ии
+    /*
     if (json.type === 'msg') { 
         addMessage(json.message)
     } else if (json.type === 'shipinfo') {
@@ -59,7 +63,18 @@ connection.onmessage = function (message) {
       }
      else {
         console.log('Hmm..., I\'ve never seen JSON like this:', json);
-      }   
+      }   */
+
+     if (response.type == "battle_req") {
+        addMessage(response.name + " requested battle, press accept to battle!");
+        //loadshipinfo("enemy", response);
+        connection.send("accept");
+
+    } else if (response.type == "msg") {
+      addMessage(response.message)
+    } else if (response.type == "shipinfo") {
+        //loadshipinfo("player", response);
+    }
     };
 
 function addMessage(message) {
