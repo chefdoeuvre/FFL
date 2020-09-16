@@ -1,0 +1,34 @@
+before_script:
+  # Git and SSH setup to clone private repos
+  # Needs the deploykey file to be installed in all dependent repositories
+  # Add gitlab to known_hosts
+  - mkdir -p ~/.ssh && chmod 700 ~/.ssh
+  - ssh-keyscan -H $PROD_IP >> ~/.ssh/known_hosts
+  # Start the ssh agent and add the deploykey
+  - chmod 400 $PROD_SSH_KEY
+  - eval $(ssh-agent -s)
+  - ssh-add $PROD_SSH_KEY
+  
+stages:
+  - build
+    
+build:
+  stage: build
+  image : microsoft/dotnet:latest
+  script:
+    - "dotnet publish src/LFLserver.sln -c release --self-contained false -r ubuntu.18.04-x64 -f netcoreapp2.1"
+    # copy files to server
+    - ssh $PROD_USER@$PROD_IP 'sudo /opt/LFL-Back/restart.sh' #screen -S server -p 0 -X stuff "close^M"
+    # clean log file before server start server
+    - ssh $PROD_USER@$PROD_IP 'sudo cat /opt/LFL-Back/publish/log.txt >> /opt/LFL-Back/publish/log_all.txt'
+    - ssh $PROD_USER@$PROD_IP 'sudo rm /opt/LFL-Back/publish/log.txt && touch /opt/LFL-Back/publish/log.txt'
+    - scp -r "/builds/Maxx53/LFL-Back/src/LFLserver/bin/Release/netcoreapp2.1/ubuntu.18.04-x64/publish/" $PROD_USER@$PROD_IP:/opt/LFL-Back/
+    # restart server backend
+    #- ssh $PROD_USER@$PROD_IP 'sudo systemctl restart systemd-networkd'
+    - ssh $PROD_USER@$PROD_IP 'cd /opt/LFL-Back/publish/ && sudo screen -dmS server ./LFLserver'
+    - ssh $PROD_USER@$PROD_IP 'cat /opt/LFL-Back/publish/log.txt'
+  artifacts:
+    untracked: true
+    paths:
+    - /builds/Maxx53/LFL-Back/LFL-Back/src/LFLserver/bin/Release/netcoreapp2.1/ubuntu.18.04-x64/publish/*
+    expire_in: 1 week
